@@ -4,19 +4,43 @@ using System.Collections;
 public class Tetromino : MonoBehaviour {
 
 	private float fall = 0f;
+	private float individualScoreTime;
+
+	private AudioSource audioSource;
+
+	public int individualScore = 100;
 
 	public float fallSpeed = 1f;
+
 	public bool allowRotation = true;
 	public bool limitRotation = false;
 
-	// Use this for initialization
+	public AudioClip moveSound;
+	public AudioClip rotateSound;
+	public AudioClip landSound;
+
 	void Start () {
 	
+		audioSource = GetComponent<AudioSource> ();
 	}
-	
-	// Update is called once per frame
+		
 	void Update () {
 		CheckUserInput ();
+		UpdateIndividualScore ();
+	}
+
+	void UpdateIndividualScore () {
+
+		if (individualScoreTime < 1) {
+		
+			individualScoreTime += Time.deltaTime;
+
+		} else {
+		
+			individualScoreTime = 0;
+			individualScore = Mathf.Max (individualScore - 10, 0);
+
+		}
 	}
 
 	void CheckUserInput() {
@@ -28,6 +52,7 @@ public class Tetromino : MonoBehaviour {
 			if (CheckIsValidPosition ()) {
 
 				FindObjectOfType<Game> ().UpdateGrid (this);
+				PlayMoveAudio ();
 			} else {
 			
 				transform.position += new Vector3 (-1f, 0f, 0f);
@@ -40,6 +65,7 @@ public class Tetromino : MonoBehaviour {
 			if (CheckIsValidPosition ()) {
 
 				FindObjectOfType<Game> ().UpdateGrid (this);
+				PlayMoveAudio ();
 			} else {
 
 				transform.position += new Vector3 (1f, 0f, 0f);
@@ -64,9 +90,11 @@ public class Tetromino : MonoBehaviour {
 				}
 				if (CheckIsValidPosition ()) {
 
+					//- if the position is valid, we update the grid
 					FindObjectOfType<Game> ().UpdateGrid (this);
+
+					PlayRotateAudio ();
 				} else {
-			
 					if (limitRotation) {
 
 						if (transform.rotation.eulerAngles.z >= 90) {
@@ -90,19 +118,60 @@ public class Tetromino : MonoBehaviour {
 			if (CheckIsValidPosition ()) {
 
 				FindObjectOfType<Game> ().UpdateGrid (this);
+
+				if (Input.GetKeyDown (KeyCode.DownArrow)) {
+
+					PlayMoveAudio ();
+				}
+
 			} else {
 
 				transform.position += new Vector3 (0f, 1f, 0f);
 
 				FindObjectOfType<Game> ().DeleteRow ();
 
-				enabled = false;
+				//- Check if there are any minos above the grid
+				if (FindObjectOfType<Game> ().CheckIsAboveGrid (this)) {
+				
+					FindObjectOfType<Game> ().GameOver ();
+				}
 
+				//- Play land audio, then Spawn the next piece
+				PlayLandAudio();
 				FindObjectOfType<Game> ().SpawnNextTetromino ();
+
+				Game.currentScore += individualScore;
+
+				enabled = false;
+			
 			}
 
 			fall = Time.time;
 		}
+	}
+
+	/// <summary>
+	/// Plays the move sound when tetromino moves
+	/// </summary>
+	void PlayMoveAudio () {
+
+		audioSource.PlayOneShot (moveSound);
+	}
+
+	/// <summary>
+	/// Plays the rotate sound when the tetormino rotates
+	/// </summary>
+	void PlayRotateAudio() {
+
+		audioSource.PlayOneShot (rotateSound);
+	}
+
+	/// <summary>
+	/// Plays land sound when tetromino lands
+	/// </summary>
+	void PlayLandAudio () {
+
+		audioSource.PlayOneShot (landSound);
 	}
 
 	bool CheckIsValidPosition () {

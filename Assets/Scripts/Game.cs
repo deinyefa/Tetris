@@ -1,17 +1,112 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
 
 	public static int gridWidth = 10;
 	public static int gridHeight = 20;
+	public static int currentScore = 0;
 
 	public static Transform [,] grid = new Transform[gridWidth, gridHeight];
 
-	// Use this for initialization
+	public int scoreOneLine = 40;
+	public int scoreTwoLine = 100;
+	public int scoreThreeLine = 300;
+	public int scoreFourLine = 1200;
+
+	public Text hud_score;
+	public AudioClip clearedLineSound;
+
+	private int numberOfRowsThisTurn = 0;
+
+	private AudioSource audioSource;
+
 	void Start () {
 		
 		SpawnNextTetromino ();
+
+		audioSource = GetComponent<AudioSource> ();
+	}
+
+	void Update () {
+
+		UpdateScore ();
+		UpdateUI ();
+	}
+
+	public void UpdateUI () {
+	
+		hud_score.text = currentScore.ToString ();
+	}
+
+	public void UpdateScore() {
+	
+		if (numberOfRowsThisTurn > 0) {
+		
+			if (numberOfRowsThisTurn == 1) {
+
+				ClearedOneLine ();
+
+			} else if (numberOfRowsThisTurn == 2) {
+
+				ClearedTwoLines ();
+
+			} else if (numberOfRowsThisTurn == 3) {
+
+				ClearedThreeLines ();
+
+			} else if (numberOfRowsThisTurn == 4) {
+
+				ClearedFourLines ();
+
+			}
+
+			numberOfRowsThisTurn = 0;
+
+			PlayLineCleardSound ();
+		}
+	}
+
+	public void ClearedOneLine() {
+	
+		currentScore += scoreOneLine;
+	}
+
+	public void ClearedTwoLines () {
+	
+		currentScore += scoreTwoLine;
+	}
+
+	public void ClearedThreeLines () {
+	
+		currentScore += scoreThreeLine;
+	}
+
+	public void ClearedFourLines () {
+	
+		currentScore += scoreFourLine;
+	}
+
+	public void PlayLineCleardSound () {
+
+		audioSource.PlayOneShot (clearedLineSound);
+	}
+
+	public bool CheckIsAboveGrid (Tetromino tetromino) {
+
+		for (int x = 0; x < gridWidth; ++x) {
+		
+			foreach (Transform mino in tetromino.transform) {
+			
+				Vector2 pos = Round (mino.position);
+				if (pos.y > gridHeight - 1) {
+				
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public bool IsFullRowAt (int y) {
@@ -23,6 +118,9 @@ public class Game : MonoBehaviour {
 				return false;
 			}
 		}
+		// since found a full row, increment ful row variable
+		numberOfRowsThisTurn ++;
+
 		return true;
 	}
 
@@ -39,7 +137,7 @@ public class Game : MonoBehaviour {
 	
 		for (int x = 0; x < gridWidth; ++x) {
 		
-			if (grid [x, y] != null) {
+			if (grid [x, y] != null && y>0) {
 			
 				grid [x, y - 1] = grid [x, y];
 				grid [x, y] = null;
@@ -64,7 +162,6 @@ public class Game : MonoBehaviour {
 	public void MoveAllRowsDown (int y) {
 
 		for (int i = 0; i < gridHeight; ++i) {
-		
 			MoveRowDown (i);
 		}
 	}
@@ -152,5 +249,10 @@ public class Game : MonoBehaviour {
 			break;
 		}
 		return randomTetrominoName;
+	}
+
+	public void GameOver () {
+
+		Application.LoadLevel ("Game Over");
 	}
 }
