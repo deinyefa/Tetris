@@ -161,7 +161,7 @@ public class Game : MonoBehaviour {
 
 	public void MoveAllRowsDown (int y) {
 
-		for (int i = 0; i < gridHeight; ++i) {
+		for (int i = y; i < gridHeight; ++i) {
 			MoveRowDown (i);
 		}
 	}
