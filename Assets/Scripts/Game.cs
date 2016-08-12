@@ -15,12 +15,27 @@ public class Game : MonoBehaviour {
 	public int scoreThreeLine = 300;
 	public int scoreFourLine = 1200;
 
+	public int currentLevel = 0;
+	private int numLinesCleared = 0;
+
+	public float fallSpeed = 1f;
+
 	public Text hud_score;
+	public Text hud_level;
+	public Text hud_lines;
+
 	public AudioClip clearedLineSound;
 
 	private int numberOfRowsThisTurn = 0;
 
 	private AudioSource audioSource;
+
+	private GameObject previewTetromino, nextTetromino;
+
+	private bool gameStarted = false;
+
+	private Vector2 previewTetrominoPosition = new Vector2 (-6.5f, 15f);
+
 
 	void Start () {
 		
@@ -33,11 +48,25 @@ public class Game : MonoBehaviour {
 
 		UpdateScore ();
 		UpdateUI ();
+		UpdateLevel ();
+		UpdateSpeed ();
+	}
+
+	void UpdateLevel() {
+
+		currentLevel = numLinesCleared / 10;
+	}
+
+	void UpdateSpeed() {
+
+		fallSpeed = 1f - ((float)currentLevel * 0.1f);
 	}
 
 	public void UpdateUI () {
 	
-		hud_score.text = currentScore.ToString ();
+		hud_score.text = "Score: " + currentScore.ToString ();
+		hud_level.text = "Level " + currentLevel.ToString ();
+		hud_lines.text = "Lines: " + numLinesCleared.ToString ();
 	}
 
 	public void UpdateScore() {
@@ -70,22 +99,26 @@ public class Game : MonoBehaviour {
 
 	public void ClearedOneLine() {
 	
-		currentScore += scoreOneLine;
+		currentScore += scoreOneLine + (currentLevel * 20);
+		numLinesCleared++;
 	}
 
 	public void ClearedTwoLines () {
 	
-		currentScore += scoreTwoLine;
+		currentScore += scoreTwoLine + (currentLevel * 25);
+		numLinesCleared += 2;
 	}
 
 	public void ClearedThreeLines () {
 	
-		currentScore += scoreThreeLine;
+		currentScore += scoreThreeLine + (currentLevel * 30);
+		numLinesCleared += 3;
 	}
 
 	public void ClearedFourLines () {
 	
-		currentScore += scoreFourLine;
+		currentScore += scoreFourLine + (currentLevel * 40);
+		numLinesCleared += 4;
 	}
 
 	public void PlayLineCleardSound () {
@@ -206,7 +239,25 @@ public class Game : MonoBehaviour {
 
 	public void SpawnNextTetromino () {
 
-		GameObject nextTetromino = (GameObject)Instantiate (Resources.Load (GetRandomTetromino (), typeof(GameObject)), new Vector2 (5f, 20f), Quaternion.identity);
+		if (!gameStarted) {
+
+			gameStarted = true;
+
+			//- Spawn another tetromino from the resourses assets folder using the GetRandomTetromino method to select a random prefab
+			nextTetromino = (GameObject)Instantiate (Resources.Load (GetRandomTetromino (), typeof(GameObject)), new Vector2 (5f, 20f), Quaternion.identity);
+			previewTetromino = (GameObject)Instantiate (Resources.Load (GetRandomTetromino (), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
+			previewTetromino.GetComponent<Tetromino> ().enabled = false;
+
+		} else {
+
+			previewTetromino.transform.localPosition = new Vector2 (5f, 20f);
+			nextTetromino = previewTetromino;
+			nextTetromino.GetComponent <Tetromino> ().enabled = true;
+
+			previewTetromino = (GameObject)Instantiate (Resources.Load (GetRandomTetromino (), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
+			previewTetromino.GetComponent<Tetromino> ().enabled = false;
+		}
+
 	}
 
 	public bool CheckIsInsideGrid (Vector2 pos) {
