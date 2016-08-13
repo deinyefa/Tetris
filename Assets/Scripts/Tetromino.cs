@@ -31,16 +31,34 @@ public class Tetromino : MonoBehaviour {
 	private float individualScoreTime;
 
 
+	//- Touch movement variables
+	private int touchSensitivityHorizontal = 8;
+	private int touchSensitivityVertical = 4;
+
+	Vector2 previousUnitPosition = Vector2.zero;
+	Vector2 direction = Vector2.zero;
+
+	bool moved = false;
+
+
 	void Start () {
 	
 		audioSource = GetComponent<AudioSource> ();
-
-		fallSpeed = GameObject.Find ("GameScript").GetComponent<Game>().fallSpeed;
 	}
 		
 	void Update () {
-		CheckUserInput ();
-		UpdateIndividualScore ();
+
+		if (!Game.isPaused) {
+
+			CheckUserInput ();
+			UpdateIndividualScore ();
+			UpdateFallSpeed ();
+		}
+	}
+
+	void UpdateFallSpeed () {
+
+		fallSpeed = Game.fallSpeed;
 	}
 
 	void UpdateIndividualScore () {
@@ -66,6 +84,61 @@ public class Tetromino : MonoBehaviour {
 		//- Options are left, right, down and up
 		//- Left and right moves the tetromino horizontally
 		//- Up rotates it
+		#if UNITY_ANDROID
+
+		if (Input.touchCount > 0) {
+		
+			Touch t = Input.GetTouch (0);
+
+			if (t.phase == TouchPhase.Began) {
+			
+				previousUnitPosition = new Vector2 (t.position.x, t.position.y);
+
+			} else if (t.phase == TouchPhase.Moved) {
+
+				Vector2 touchDeltaPosition = t.deltaPosition;
+				direction = touchDeltaPosition.normalized;
+
+				if (Mathf.Abs (t.position.x - previousUnitPosition.x) >= touchSensitivityHorizontal && direction.x < 0 && t.deltaPosition.y > -10 && t.deltaPosition.y < 10) {
+				
+					//- Move left
+					MoveLeft ();
+					previousUnitPosition = t.position;
+					moved = true;
+
+				} else if (Mathf.Abs (t.position.x - previousUnitPosition.x) >= touchSensitivityHorizontal && direction.x > 0 && t.deltaPosition.y > -10 && t.deltaPosition.y < 10) {
+				
+					//- Move right
+					MoveRight ();
+					previousUnitPosition = t.position;
+					moved = true;
+
+				} else if (Mathf.Abs (t.position.y - previousUnitPosition.y) >= touchSensitivityVertical && direction.y < 0 && t.deltaPosition.x > -10 && t.deltaPosition.x < 10) {
+				
+					//- Move down
+					MoveDown ();
+					previousUnitPosition = t.position;
+					moved = true;
+					PlayMoveAudio ();
+				}
+
+			} else if (t.phase == TouchPhase.Ended) {
+			
+				if (!moved && t.position.x > Screen.width / 4) {
+				
+					Rotate ();
+				}
+
+				moved = false;
+			}
+		}
+
+		if (Time.time - fall >= fallSpeed) {
+
+			MoveDown();
+		}
+
+		#else
 
 		if (Input.GetKeyUp (KeyCode.RightArrow) || Input.GetKeyUp (KeyCode.LeftArrow)) {
 		
@@ -81,7 +154,7 @@ public class Tetromino : MonoBehaviour {
 			buttonDownWaitTimerVertical = 0;
 		}
 		
-		if (Input.GetKey (KeyCode.RightArrow)) {
+		if (Input.GetKey(KeyCode.RightArrow)) {
 
 			MoveRight ();
 		}
@@ -100,6 +173,8 @@ public class Tetromino : MonoBehaviour {
 
 			MoveDown ();
 		}
+
+		#endif
 	}
 
 	/// <summary>

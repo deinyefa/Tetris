@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityStandardAssets.ImageEffects;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Game : MonoBehaviour {
 
@@ -10,6 +13,12 @@ public class Game : MonoBehaviour {
 
 	public static Transform [,] grid = new Transform[gridWidth, gridHeight];
 
+	public static bool startingAtLevelZero;
+	public static int startingLevel;
+
+	public Canvas hud_canvas;
+	public Canvas pause_canvas;
+
 	public int scoreOneLine = 40;
 	public int scoreTwoLine = 100;
 	public int scoreThreeLine = 300;
@@ -18,7 +27,8 @@ public class Game : MonoBehaviour {
 	public int currentLevel = 0;
 	private int numLinesCleared = 0;
 
-	public float fallSpeed = 1f;
+	public static float fallSpeed = 1f;
+	public static bool isPaused = false;
 
 	public Text hud_score;
 	public Text hud_level;
@@ -33,15 +43,31 @@ public class Game : MonoBehaviour {
 	private GameObject previewTetromino, nextTetromino;
 
 	private bool gameStarted = false;
+	private int startingHighScore;
+	private int startingHighScore2;
+	private int startingHighScore3;
 
-	private Vector2 previewTetrominoPosition = new Vector2 (-6.5f, 15f);
+	private Vector2 previewTetrominoPosition = new Vector2 (12f, 15f);
 
 
 	void Start () {
-		
+
+		pause_canvas.enabled = false;
+
+		currentScore = 0;
+		hud_score.text = "0";
+
+		currentLevel = startingLevel;
+		hud_level.text = currentLevel.ToString ();
+		hud_lines.text = "0";
+
 		SpawnNextTetromino ();
 
 		audioSource = GetComponent<AudioSource> ();
+
+		startingHighScore = PlayerPrefs.GetInt ("highscore");
+		startingHighScore2 = PlayerPrefs.GetInt ("highscore2");
+		startingHighScore3 = PlayerPrefs.GetInt ("highscore3");
 	}
 
 	void Update () {
@@ -50,25 +76,77 @@ public class Game : MonoBehaviour {
 		UpdateUI ();
 		UpdateLevel ();
 		UpdateSpeed ();
+		CheckUserInput ();
 	}
 
+	void CheckUserInput() {
+
+		if (CrossPlatformInputManager.GetButtonDown ("MoveTouchpad")) {
+		
+			if (Time.timeScale == 1)
+				PauseGame ();
+			else
+				ResumeGame ();
+		}
+	}
+
+	/// <summary>
+	/// Pauses the game.
+	/// </summary>
+	public void PauseGame () {
+
+		Time.timeScale = 0;
+		audioSource.Pause ();
+		isPaused = true;
+//		hud_canvas.enabled = false;
+		pause_canvas.enabled = true;
+		Camera.main.GetComponent<Blur>().enabled = true;
+	}
+
+	/// <summary>
+	/// Resumes the game.
+	/// </summary>
+	public void ResumeGame () {
+
+		Time.timeScale = 1;
+		isPaused = false;
+		audioSource.Play ();
+		hud_canvas.enabled = true;
+		pause_canvas.enabled = false;
+		Camera.main.GetComponent<Blur>().enabled = false;
+	}
+
+	/// <summary>
+	/// Updates the level.
+	/// </summary>
 	void UpdateLevel() {
 
-		currentLevel = numLinesCleared / 10;
+		if ((startingAtLevelZero == true) || (startingAtLevelZero == false && numLinesCleared / 10 > startingLevel)) {
+			currentLevel = numLinesCleared / 10;
+		}
 	}
 
+	/// <summary>
+	/// Updates the speed.
+	/// </summary>
 	void UpdateSpeed() {
 
 		fallSpeed = 1f - ((float)currentLevel * 0.1f);
 	}
 
+	/// <summary>
+	/// Updates the UI.
+	/// </summary>
 	public void UpdateUI () {
 	
-		hud_score.text = "Score: " + currentScore.ToString ();
-		hud_level.text = "Level " + currentLevel.ToString ();
-		hud_lines.text = "Lines: " + numLinesCleared.ToString ();
+		hud_score.text = currentScore.ToString ();
+		hud_level.text = currentLevel.ToString ();
+		hud_lines.text = numLinesCleared.ToString ();
 	}
 
+	/// <summary>
+	/// Updates the score.
+	/// </summary>
 	public void UpdateScore() {
 	
 		if (numberOfRowsThisTurn > 0) {
@@ -124,6 +202,28 @@ public class Game : MonoBehaviour {
 	public void PlayLineCleardSound () {
 
 		audioSource.PlayOneShot (clearedLineSound);
+	}
+
+	/// <summary>
+	/// Updates the high score.
+	/// </summary>
+	public void UpdateHighScore () {
+		
+		if (currentScore > startingHighScore) {
+
+			PlayerPrefs.SetInt ("highscore3", startingHighScore2);
+			PlayerPrefs.SetInt ("highscore2", startingHighScore);
+			PlayerPrefs.SetInt ("highscore", currentScore);
+
+		} else if (currentScore > startingHighScore2) {
+		
+			PlayerPrefs.SetInt ("highscore3", startingHighScore2);
+			PlayerPrefs.SetInt ("highscore2", currentScore);
+
+		} else if (currentScore > startingHighScore3) {
+		
+			PlayerPrefs.SetInt ("highscore3", currentScore);
+		}
 	}
 
 	public bool CheckIsAboveGrid (Tetromino tetromino) {
@@ -304,6 +404,7 @@ public class Game : MonoBehaviour {
 
 	public void GameOver () {
 
-		Application.LoadLevel ("Game Over");
+		UpdateHighScore ();
+		SceneManager.LoadScene ("Game Over");
 	}
 }
