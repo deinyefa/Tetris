@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.ImageEffects;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.Advertisements;
 
 public class Game : MonoBehaviour {
 
@@ -70,6 +71,16 @@ public class Game : MonoBehaviour {
 		startingHighScore3 = PlayerPrefs.GetInt ("highscore3");
 	}
 
+	/// <summary>
+	/// Shows the ad.
+	/// </summary>
+	public void ShowAd () {
+		if (Advertisement.IsReady())
+		{
+			Advertisement.Show();
+		}
+	}
+
 	void Update () {
 
 		UpdateScore ();
@@ -81,7 +92,7 @@ public class Game : MonoBehaviour {
 
 	void CheckUserInput() {
 
-		if (CrossPlatformInputManager.GetButtonDown ("MoveTouchpad")) {
+		if (CrossPlatformInputManager.GetButtonDown ("MoveTouchpad") || Input.GetKeyDown (KeyCode.P)) {
 		
 			if (Time.timeScale == 1)
 				PauseGame ();
@@ -101,6 +112,8 @@ public class Game : MonoBehaviour {
 //		hud_canvas.enabled = false;
 		pause_canvas.enabled = true;
 		Camera.main.GetComponent<Blur>().enabled = true;
+
+		ShowAd ();
 	}
 
 	/// <summary>
@@ -224,6 +237,8 @@ public class Game : MonoBehaviour {
 		
 			PlayerPrefs.SetInt ("highscore3", currentScore);
 		}
+
+		PlayerPrefs.SetInt ("lastscore", currentScore);
 	}
 
 	public bool CheckIsAboveGrid (Tetromino tetromino) {

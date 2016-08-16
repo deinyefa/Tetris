@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Advertisements;
 
 public class MenuSystem : MonoBehaviour {
 
@@ -10,22 +11,49 @@ public class MenuSystem : MonoBehaviour {
 	public Text highScoreText2;
 	public Text highScoreText3;
 
+	public Text lastScore;
+
 	void Start () {
 
+		//- ad testmode is true
+		Advertisement.Initialize ("1115962", true);
 
-		levelText.text = "Level: 0";
+		if (levelText != null)
+			levelText.text = "Level: 0";
+		
+		if (highScoreText != null)
+			highScoreText.text = PlayerPrefs.GetInt ("highscore").ToString();
 
-		highScoreText.text = PlayerPrefs.GetInt ("highscore").ToString();
-		highScoreText2.text = PlayerPrefs.GetInt ("highscore2").ToString();
-		highScoreText3.text = PlayerPrefs.GetInt ("highscore3").ToString ();
+		if (highScoreText2 != null)
+			highScoreText2.text = PlayerPrefs.GetInt ("highscore2").ToString();
+
+		if (highScoreText3 != null)
+			highScoreText3.text = PlayerPrefs.GetInt ("highscore3").ToString ();
+
+		if (lastScore != null)
+			lastScore.text = PlayerPrefs.GetInt ("lastscore").ToString ();
 	}
+
+	/// <summary>
+	/// Shows the ad.
+	/// </summary>
+	public void ShowAd () {
+
+		if (Advertisement.IsReady())
+		{
+			Advertisement.Show();
+		}
+	}
+
 
 	public void PlayAgain () {
 
+		ShowAd ();
 		SceneManager.LoadScene ("Start");
 	}
 
 	public void GameLevel () {
+		
 		if (Game.startingLevel == 0) {
 			
 			Game.startingAtLevelZero = true;
