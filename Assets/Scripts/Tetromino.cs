@@ -119,7 +119,6 @@ public class Tetromino : MonoBehaviour {
 					MoveDown ();
 					previousUnitPosition = t.position;
 					moved = true;
-					PlayMoveAudio ();
 				}
 
 			} else if (t.phase == TouchPhase.Ended) {

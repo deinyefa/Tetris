@@ -48,7 +48,7 @@ public class Game : MonoBehaviour {
 	private int startingHighScore2;
 	private int startingHighScore3;
 
-	private Vector2 previewTetrominoPosition = new Vector2 (13.5f, 15f);
+	private Vector2 previewTetrominoPosition = new Vector2 (12f, 15f);
 
 
 	void Start () {

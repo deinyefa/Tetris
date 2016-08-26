@@ -76,4 +76,9 @@ public class MenuSystem : MonoBehaviour {
 		levelText.text = "Level: " + value.ToString ();
 	}
 
+	public void ReStart () {
+
+		Application.LoadLevel (Application.loadedLevel);
+	}
+
 }
