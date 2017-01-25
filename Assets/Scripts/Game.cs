@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.ImageEffects;
 using UnityStandardAssets.CrossPlatformInput;
-using UnityEngine.Advertisements;
+//using UnityEngine.Advertisements;
 
 public class Game : MonoBehaviour {
 
@@ -48,7 +48,7 @@ public class Game : MonoBehaviour {
 	private int startingHighScore2;
 	private int startingHighScore3;
 
-	private Vector2 previewTetrominoPosition = new Vector2 (12f, 15f);
+	private Vector2 previewTetrominoPosition = new Vector2 (16.8f, 15f);
 
 
 	void Start () {
@@ -74,12 +74,13 @@ public class Game : MonoBehaviour {
 	/// <summary>
 	/// Shows the ad.
 	/// </summary>
-	public void ShowAd () {
+/*	public void ShowAd () {
 		if (Advertisement.IsReady())
 		{
 			Advertisement.Show();
 		}
 	}
+    */
 
 	void Update () {
 
@@ -113,7 +114,7 @@ public class Game : MonoBehaviour {
 		pause_canvas.enabled = true;
 		Camera.main.GetComponent<Blur>().enabled = true;
 
-		ShowAd ();
+//		ShowAd ();
 	}
 
 	/// <summary>

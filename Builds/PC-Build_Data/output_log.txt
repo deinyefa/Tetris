@@ -1,0 +1,64 @@
+Initialize engine version: 5.5.0f3 (38b4efef76f0)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 1060 (ID=0x1c60)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+    Driver:   21.21.13.6891
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
+Loading C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.039 seconds
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Deiny\Desktop\Unity_Projects\Games\Tetro\Builds\PC-Build_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 1.031109 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 3e20 -> priority: 1 
+  Thread -> id: 2cd8 -> priority: 1 
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 6.032190 ms
+
+Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 310.
+Total: 0.270221 ms (FindLiveObjects: 0.023703 ms CreateObjectMapping: 0.021728 ms MarkObjects: 0.180938 ms  DeleteObjects: 0.043456 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.432197 ms
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 374.
+Total: 0.229135 ms (FindLiveObjects: 0.016592 ms CreateObjectMapping: 0.013827 ms MarkObjects: 0.195555 ms  DeleteObjects: 0.003160 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.365036 ms
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 310.
+Total: 0.202666 ms (FindLiveObjects: 0.016592 ms CreateObjectMapping: 0.012246 ms MarkObjects: 0.132345 ms  DeleteObjects: 0.041086 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.289974 ms
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 374.
+Total: 0.262715 ms (FindLiveObjects: 0.039111 ms CreateObjectMapping: 0.016592 ms MarkObjects: 0.202666 ms  DeleteObjects: 0.003950 ms)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.578369 ms
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 890.
+Total: 0.284839 ms (FindLiveObjects: 0.048592 ms CreateObjectMapping: 0.021728 ms MarkObjects: 0.205036 ms  DeleteObjects: 0.009086 ms)
+

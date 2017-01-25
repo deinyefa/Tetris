@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Advertisements;
+//using UnityEngine.Advertisements;
 
 public class MenuSystem : MonoBehaviour {
 
@@ -16,7 +16,7 @@ public class MenuSystem : MonoBehaviour {
 	void Start () {
 
 		//- ad testmode is true
-		Advertisement.Initialize ("1115962", true);
+//		Advertisement.Initialize ("1115962", true);
 
 		if (levelText != null)
 			levelText.text = "Level: 0";
@@ -37,18 +37,18 @@ public class MenuSystem : MonoBehaviour {
 	/// <summary>
 	/// Shows the ad.
 	/// </summary>
-	public void ShowAd () {
+/*	public void ShowAd () {
 
 		if (Advertisement.IsReady())
 		{
 			Advertisement.Show();
 		}
 	}
-
+*/
 
 	public void PlayAgain () {
 
-		ShowAd ();
+//		ShowAd ();
 		SceneManager.LoadScene ("Start");
 	}
 
@@ -78,7 +78,8 @@ public class MenuSystem : MonoBehaviour {
 
 	public void ReStart () {
 
-		Application.LoadLevel (Application.loadedLevel);
+        SceneManager.LoadScene("Level");
+//		Application.LoadLevel (Application.loadedLevel);
 	}
 
 }
